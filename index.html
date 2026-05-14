@@ -1015,24 +1015,23 @@ function submitSign() {
   document.getElementById('completeTime').textContent = timeStr + '（JST）';
   document.getElementById('completeHash').textContent = hash;
 
-  // Google Apps Scriptへ送信
-  const GAS_URL = 'https://script.google.com/macros/s/AKfycbxDZPnL4RyqcsN5sSsWM34lV9lHCcp3SFe5UTliln74Ho9Bz7yqTjSXbDYsOwJ4ykrn/exec';
-  const payload = {
-    contractId: id,
-    name: name,
-    address: addr,
-    phone: phone,
-    email: document.getElementById('signerEmail').value,
-    carNumber: document.getElementById('carNumber').value || '未記入',
-    carModel: document.getElementById('carModel').value || '未記入',
-    timestamp: timeStr,
-    hash: hash
-  };
+  // Googleフォームへ送信
+  const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLScaYlFx53EqU4pP9BKfq7aefw2XxqADkemD3wToCPZi48kOOw/formResponse';
+  const formData = new FormData();
+  formData.append('entry.1285400967', id);
+  formData.append('entry.772712909', name);
+  formData.append('entry.92665470', addr);
+  formData.append('entry.1339331299', phone);
+  formData.append('entry.2064844531', document.getElementById('signerEmail').value || '未記入');
+  formData.append('entry.1431373906', document.getElementById('carNumber').value || '未記入');
+  formData.append('entry.1235715888', document.getElementById('carModel').value || '未記入');
+  formData.append('entry.317639689', timeStr);
+  formData.append('entry.1348935248', hash);
 
-  fetch(GAS_URL, {
+  fetch(FORM_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
+    mode: 'no-cors',
+    body: formData
   }).catch(err => console.log('送信エラー:', err));
 
   goToPage(3);
