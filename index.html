@@ -406,7 +406,7 @@ function isCanvasEmpty(canvasId) {
   return true;
 }
 
-setupCanvas('tenantCanvas', 'tenantPlaceholder');
+let canvasInitialized = false;
 
 // ========== ページ遷移 ==========
 function goToPage(n) {
@@ -423,6 +423,12 @@ function goToPage(n) {
     el.classList.toggle('done', i + 1 < n);
   });
   window.scrollTo(0, 0);
+  if (n === 2 && !canvasInitialized) {
+    setTimeout(function() {
+      setupCanvas('tenantCanvas', 'tenantPlaceholder');
+      canvasInitialized = true;
+    }, 100);
+  }
 }
 
 // ========== 署名送信 ==========
